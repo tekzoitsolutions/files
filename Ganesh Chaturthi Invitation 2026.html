@@ -784,6 +784,10 @@
       background: none;
       cursor: pointer;
       touch-action: manipulation;
+      appearance: none;
+      -webkit-appearance: none;
+      -webkit-user-select: none;
+      user-select: none;
       -webkit-tap-highlight-color: transparent;
       opacity: 0;
       transform: translateY(14px);
@@ -4464,12 +4468,19 @@
     }
 
     if (ringBtn) {
+      var lastBellActivation = 0;
+
       function activateBell(e) {
         if (e) e.preventDefault();
+        var now = Date.now();
+        if (now - lastBellActivation < 700) return;
+        lastBellActivation = now;
         openInvitation();
       }
 
+      ringBtn.addEventListener('pointerdown', activateBell);
       ringBtn.addEventListener('pointerup', activateBell);
+      ringBtn.addEventListener('touchstart', activateBell, { passive: false });
       ringBtn.addEventListener('touchend', activateBell, { passive: false });
       ringBtn.addEventListener('click', activateBell);
     }
